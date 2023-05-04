@@ -1,32 +1,12 @@
 <?php
+//Bootstrap Implementation
+include('header.php');
+include('footer.php');
 
+//Database Connection File
 include("config.php");
 session_start();
 
-if(isset($_SESSION["loggedin"])&&$_SESSION["loggedin"]==true)
-{
-    $sql="SELECT type FROM login_data WHERE u_name='$username' AND u_password='$password'";
-    $conn->query($sql);
-    $result=$conn->query($sql);
-    $row=$result->fetch_assoc();
-    
-if($_SESSION['type']=="Admin")
-{
-    $_SESSION['type']="Admin";
-  header("location:Admin/admin_dash.php");
-}
-// else if($_SESSION['type']=="user")
-// {
-//     $_SESSION['type']="user";
-//     header("location:welcome2.php");
-// }
-// else if($_SESSION['type']=="sub")
-// {
-//     $_SESSION['type']="sub";
-//     header("location:welcome3.php");
-// }
-  exit;
-}
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
@@ -39,39 +19,48 @@ if($result->num_rows==1)
     $row=$result->fetch_assoc();
     if($row['u_name']==$username && $row['u_password']==$password)
     {
-      $_SESSION['u_name'] = $row['u_name'];
+        if($row['u_role']=='Admin')
+        {
+          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_role'] = $row['u_role'];
 
-      $_SESSION['type'] = $row['type'];
+          header("location:Admin/admin_dash.php");
+        }
+        else if($row['u_role']=='Principal')
+        {
+          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_role'] = $row['u_role'];
 
-      header("Location: Admin/admin_dash.php");
+          header("location:Principal/principal_dash.php");
+        }
+        else if($row['u_role']=='Teacher')
+        {
+          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_role'] = $row['u_role'];
 
-      exit();
+          header("location:Teachers/teacher_dash.php");
+        }
+        else if($row['u_role']=='Student')
+        {
+          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_role'] = $row['u_role'];
+
+          header("location:Student/student_dash.php");
+        }
+
     }
-
-    // if($row["type"]=="Admin")
-    // {
-    //   $_SESSION['type']="Admin";
-    //   header("location:Admin/admin_dash.php");
-    // }
-// else if($row["type"]=="user")
-// {
-//     $_SESSION['type']="user";
-//     header("location:welcome2.php");
-  
-// }
-
-// else if($row["type"]=="sub")
-// {
-//     $_SESSION['type']="sub";
-//     header("location:welcome3.php");
-// }
-
-
-
+    else
+    {
+      echo "error";
+    }
 }
 else
 {
-    echo "<CENTER>invalid username or password!</CENTER>";
+    echo "<CENTER>
+    <div class='alert alert-danger mt-3' role='alert'>
+    INVALID USERNAME OR PASSWORD
+    </div>
+    </CENTER>";
 }
 
 }
@@ -122,7 +111,7 @@ input[type="password"] {
 
 }
 </style>
-<link rel="stylesheet" href="assets/bootstrap-4.3.1/css/bootstrap.min.css">
+<title>Login</title>
 <div class="container">
   <div class="row">
     <div class="col-md-4 mt-5"></div>
@@ -149,5 +138,4 @@ input[type="password"] {
   </div>
 </div>
 
-<script src="/assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
 
