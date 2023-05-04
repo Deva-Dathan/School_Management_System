@@ -62,9 +62,7 @@ else
     </div>
     </CENTER>";
 }
-
 }
-
 ?>
 
 <style>

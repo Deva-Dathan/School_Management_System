@@ -1,3 +1,8 @@
+<?php
+include('header.php');
+include('footer.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -602,6 +607,11 @@ body {
 		min-width: 420px;
 	}
 }
+.add_fields{
+    background-color:#f9f9f9;
+    padding:20px;
+    border-radius:20px;
+}
 </style>
 </head>
 <body>
@@ -614,26 +624,26 @@ body {
 			<span class="text">School Management</span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
-				<a href="admin_dash.php">
+			<li>
+				<a href="#">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
-				<a href="add_principal.php">
+			<li class="active">
+            <a href="add_principal.php">
 					<i class='bx bxs-shopping-bag-alt' ></i>
 					<span class="text">Principal</span>
 				</a>
 			</li>
 			<li>
-				<a href="add_teacher.php">
+            <a href="add_teacher.php">
 					<i class='bx bxs-doughnut-chart' ></i>
 					<span class="text">Teachers</span>
 				</a>
 			</li>
 			<li>
-				<a href="view student.php">
+				<a href="view_student.php">
 					<i class='bx bx-user' ></i>
 					<span class="text">Students</span>
 				</a>
@@ -673,42 +683,66 @@ body {
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
+					<h1>Principal</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Dashboard</a>
+							<a href="#">Principal</a>
 						</li>
 						<li><i class='bx bx-chevron-right' ></i></li>
 						<li>
-							<a class="active" href="#">Home</a>
+							<a class="active" href="#">Add Principal</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 
-			<ul class="box-info">
-				<li>
-					<i class='bx bxs-calendar-check' ></i>
-					<span class="text">
-						<h3>1020</h3>
-						<p>New Order</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-group' ></i>
-					<span class="text">
-						<h3>2834</h3>
-						<p>Visitors</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-dollar-circle' ></i>
-					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
-					</span>
-				</li>
-			</ul>
+            <div class="add_fields">
+            <form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">First Name</label>
+      <input type="text" class="form-control" id="inputfname4" placeholder="First Name" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Last Name</label>
+      <input type="text" class="form-control" id="inputlname4" placeholder="Last Name" required>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="Address" required>
+  </div>
+  <div class="row">
+  <div class="form-group col-md-6">
+    <label for="inputemail">Email-ID</label>
+    <input type="email" class="form-control" id="inputemail" placeholder="Email-ID" required>
+  </div>
+  <div class="form-group col-md-3">
+    <label for="inputdob">Data-Of-Birth</label>
+    <input type="date" class="form-control" id="inputdob" placeholder="DOB" required>
+  </div>
+  <div class="form-group col-md-3">
+    <label for="inputQualification">Qualification</label>
+    <input type="text" class="form-control" id="inputQualification" placeholder="Qualification" required>
+  </div>
+</div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      <input type="text" class="form-control" id="inputCity" required>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">State</label>
+      <input type="text" class="form-control" id="inputstate" required>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <input type="text" class="form-control" id="inputZip" required>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Sign in</button>
+</form>
+            </div>
 
 
 			<div class="table-data">
@@ -729,7 +763,6 @@ body {
 						<tbody>
 							<tr>
 								<td>
-									<img src="img/people.png">
 									<p>John Doe</p>
 								</td>
 								<td>01-10-2021</td>
@@ -737,7 +770,6 @@ body {
 							</tr>
 							<tr>
 								<td>
-									<img src="img/people.png">
 									<p>John Doe</p>
 								</td>
 								<td>01-10-2021</td>
@@ -745,7 +777,6 @@ body {
 							</tr>
 							<tr>
 								<td>
-									<img src="img/people.png">
 									<p>John Doe</p>
 								</td>
 								<td>01-10-2021</td>
@@ -753,7 +784,6 @@ body {
 							</tr>
 							<tr>
 								<td>
-									<img src="img/people.png">
 									<p>John Doe</p>
 								</td>
 								<td>01-10-2021</td>
@@ -761,7 +791,6 @@ body {
 							</tr>
 							<tr>
 								<td>
-									<img src="img/people.png">
 									<p>John Doe</p>
 								</td>
 								<td>01-10-2021</td>
@@ -770,35 +799,7 @@ body {
 						</tbody>
 					</table>
 				</div>
-				<div class="todo">
-					<div class="head">
-						<h3>Todos</h3>
-						<i class='bx bx-plus' ></i>
-						<i class='bx bx-filter' ></i>
-					</div>
-					<ul class="todo-list">
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded' ></i>
-						</li>
-					</ul>
-				</div>
+
 			</div>
 		</main>
 		<!-- MAIN -->
@@ -830,6 +831,9 @@ const sidebar = document.getElementById('sidebar');
 menuBar.addEventListener('click', function () {
 	sidebar.classList.toggle('hide');
 })
+
+
+
 
 	</script>
 </body>
