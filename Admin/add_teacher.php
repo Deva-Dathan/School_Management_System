@@ -634,13 +634,13 @@ body {
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li class="active">
+			<li>
             <a href="add_principal.php">
 					<i class='bx bxs-shopping-bag-alt' ></i>
 					<span class="text">Principal</span>
 				</a>
 			</li>
-			<li>
+			<li class="active">
             <a href="add_teacher.php">
 					<i class='bx bxs-doughnut-chart' ></i>
 					<span class="text">Teachers</span>

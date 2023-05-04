@@ -10,39 +10,39 @@ session_start();
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
-$username=$_POST['u_name'];
+$username=$_POST['u_email'];
 $password=md5($_POST['u_password']);
-$sql="SELECT * FROM login_data WHERE u_name='$username' AND u_password='$password'";
+$sql="SELECT * FROM login_data WHERE u_email='$username' AND u_password='$password'";
 $result=$conn->query($sql);
 if($result->num_rows==1)
 {
     $row=$result->fetch_assoc();
-    if($row['u_name']==$username && $row['u_password']==$password)
+    if($row['u_email']==$username && $row['u_password']==$password)
     {
         if($row['u_role']=='Admin')
         {
-          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
           header("location:Admin/admin_dash.php");
         }
         else if($row['u_role']=='Principal')
         {
-          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
           header("location:Principal/principal_dash.php");
         }
         else if($row['u_role']=='Teacher')
         {
-          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
           header("location:Teachers/teacher_dash.php");
         }
         else if($row['u_role']=='Student')
         {
-          $_SESSION['u_name'] = $row['u_name'];
+          $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
           header("location:Student/student_dash.php");
@@ -119,7 +119,7 @@ input[type="password"] {
       <form method="post">
       <h1 class="h1 mb-3 font-weight-bold text-center ml-n4">LOGIN</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" name="u_name" class="form-control mt-5" placeholder="Email address" required autofocus>
+      <input type="email" name="u_email" class="form-control mt-5" placeholder="Email address" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" name="u_password" class="form-control" placeholder="Password" required>
 
