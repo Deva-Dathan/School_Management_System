@@ -24,28 +24,14 @@ if($result->num_rows==1)
           $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
-          header("location:Admin/admin_dash.php");
-        }
-        else if($row['u_role']=='Principal')
-        {
-          $_SESSION['u_email'] = $row['u_email'];
-          $_SESSION['u_role'] = $row['u_role'];
-
-          header("location:Principal/principal_dash.php");
-        }
-        else if($row['u_role']=='Teacher')
-        {
-          $_SESSION['u_email'] = $row['u_email'];
-          $_SESSION['u_role'] = $row['u_role'];
-
-          header("location:Teachers/teacher_dash.php");
+          header("location:add_student.php");
         }
         else if($row['u_role']=='Student')
         {
           $_SESSION['u_email'] = $row['u_email'];
           $_SESSION['u_role'] = $row['u_role'];
 
-          header("location:Student/student_dash.php");
+          header("location:student_dash.php");
         }
 
     }

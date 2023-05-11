@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('header.php');
 include('footer.php');
 include('config.php')
@@ -9,7 +10,7 @@ include('config.php')
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Add Principal</title>
+	<title>Settings</title>
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
@@ -21,6 +22,8 @@ include('config.php')
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+    overflow-x:hidden;
+    overflow-y:hidden;
 }
 
 a {
@@ -612,10 +615,32 @@ body {
     padding:20px;
     border-radius:20px;
 }
-/* .success_alert
+.personal
 {
-	margin-top:100px;
-} */
+    height:50px;
+    border:none;
+    background:#3c3c3c;
+    color:#fff;
+    text-align:center;
+    padding:8px 8px;
+    border:2px solid #f3f3f3;
+    border-radius:0px 0px 0px 15px;
+    outline:none;
+    transition:0.5s;
+}
+.changepw
+{
+    height:50px;
+    border:none;
+    outline:none; 
+    background:#fff;
+    text-align:center;
+    padding:8px 8px;
+    border:2px solid #f3f3f3;
+    border-radius:0px 0px 15px 0px;
+    outline:none;
+    transition:0.5s; 
+} 
 </style>
 </head>
 <body>
@@ -629,39 +654,21 @@ body {
 		</a>
 		<ul class="side-menu top">
 			<li>
-				<a href="#">
-					<i class='bx bxs-dashboard' ></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			<li class="active">
-            <a href="add_principal.php">
-					<i class='bx bxs-shopping-bag-alt' ></i>
-					<span class="text">Principal</span>
-				</a>
-			</li>
-			<li>
-            <a href="add_teacher.php">
-					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Teachers</span>
-				</a>
-			</li>
-			<li>
-				<a href="view_student.php">
+				<a href="add_student.php">
 					<i class='bx bx-user' ></i>
 					<span class="text">Students</span>
 				</a>
 			</li>
 		</ul>
 		<ul class="side-menu">
-			<li>
-				<a href="#">
+			<li class="active">
+				<a href="admin_settings.php">
 					<i class='bx bxs-cog' ></i>
 					<span class="text">Settings</span>
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout.php" class="logout">
 					<i class='bx bxs-log-out-circle' ></i>
 					<span class="text">Logout</span>
 				</a>
@@ -677,163 +684,269 @@ body {
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
-			<a href="#" class="profile" style="margin-left:850px;">
-				<img src="img/people.png">
-			</a>
+			
 		</nav>
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
 		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Principal</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#">Principal</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="#">Add Principal</a>
-						</li>
-					</ul>
-				</div>
-			</div>
 
-			<?php
-if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST['u_add_principal']))
+        <div class="add_fields">
+        <div class="container p-lg-4 ">
+
+
+<script>
+$(document).ready(function(){
+    $(".personal").click(function(){
+      $("#details").css("display","block");
+      $("#changepass").css("display","none");
+      $(".personal").css("background","#3c3c3c");
+      $(".personal").css("color","#fff");
+      $(".changepw").css("background","#fff");
+      $(".changepw").css("color","#000");
+    });
+    $(".changepw").click(function(){
+      $("#details").css("display","none");
+      $("#changepass").css("display","block");
+      $(".changepw").css("background","#3c3c3c");
+      $(".changepw").css("color","#fff");
+      $(".personal").css("background","#fff");
+      $(".personal").css("color","#000");
+    });
+  });    
+</script> 
+
+<div class="container">
+		<div class="row">
+        <button id="personal" class="personal">Personal Details</button>
+        <button id="changepw" class="changepw">Change Password</button>
+
+		</div> <!--End of 1st div row!--> 
+		</div> <!--End of 1st div container!--> 
+
+
+
+
+<!--Details update fields!--> 
+
+<div class="container">
+
+<?php
+if(isset($_POST['change_pw_btn']))
 {
+	$email = $_SESSION['u_email'];
+	$current = md5($_POST['current']);
+	$new = md5($_POST['new']);
+	$confirm = md5($_POST['confirm']);
 
-	$fname=$_POST['fname'];
-	$lname=$_POST['lname'];
-	$name=$fname." ".$lname;
-	$address=$_POST['address'];
-	$email=$_POST['email'];
-	$dob=$_POST['dob'];
-	$qualification=$_POST['qualification'];
-	$city=$_POST['city'];
-	$state=$_POST['state'];
-	$zip=$_POST['zip'];
+ $sql="SELECT u_password FROM login_data WHERE u_email='$email'";
+ $result=$conn->query($sql);
+ if($result->num_rows > 0)
+ {
+	while($row=$result->fetch_assoc())
+	{
+		if($current == $row['u_password'])
+		{
+			if($new == $confirm)
+			{
+				$sql2="UPDATE login_data SET u_password='$confirm' WHERE u_email='$email'";
+				if($conn->query($sql2))
+				{	  
+					echo "<div class='alert alert-success success_alert' role='alert'>
+						Password Changed
+						  </div>";
 
-	$sql="INSERT INTO user_data(u_name,u_address,u_dob,u_qualification,u_email,u_city,u_state,u_zip)values('$name','$address','$dob','$qualification','$email','$city','$state','$zip')";
-    if($conn->query($sql))
-    {
-      
-        echo "<div class='alert alert-success success_alert' role='alert'>
-				This is a success alert—check it out!
+				}
+			}
+			else
+			{
+				echo "<div class='alert alert-danger mt-3' role='alert'>
+				New Password & Confirm Password are not same.....
 	  			</div>";
+			}
+		}
+		else
+		{
+			echo "<div class='alert alert-danger mt-3' role='alert'>
+				Old Password is Wrong!
+				  </div>";
+		}
+	}
 
-			$sql2="INSERT INTO login_data(u_email,u_password,u_role)values('$email','5f4dcc3b5aa765d61d8327deb882cf99','Principal')";
-			$conn->query($sql2);
-    
-    }
-    else
-    {
-        echo "<div class='alert alert-danger' role='alert'>
-			This is a danger alert—check it out!
-	  		</div>";
-    }
+ }
+
 }
 ?>
 
-            <div class="add_fields">
-            <form method="POST">
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">First Name</label>
-      <input type="text" name="fname" class="form-control" id="inputfname4" placeholder="First Name" required>
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Last Name</label>
-      <input type="text" name="lname" class="form-control" id="inputlname4" placeholder="Last Name">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="inputAddress">Address</label>
-    <input type="text" name="address" class="form-control" id="inputAddress" placeholder="Address" required>
-  </div>
-  <div class="row">
-  <div class="form-group col-md-6">
-    <label for="inputemail">Email-ID</label>
-    <input type="email" name="email" class="form-control" id="inputemail" placeholder="Email-ID" required>
-  </div>
-  <div class="form-group col-md-3">
-    <label for="inputdob">Data-Of-Birth</label>
-    <input type="date" name="dob" class="form-control" id="inputdob" placeholder="DOB" required>
-  </div>
-  <div class="form-group col-md-3">
-    <label for="inputQualification">Qualification</label>
-    <input type="text" name="qualification" class="form-control" id="inputQualification" placeholder="Qualification" required>
-  </div>
-</div>
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <label for="inputCity">City</label>
-      <input type="text" name="city" class="form-control" id="inputCity" required>
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">State</label>
-      <input type="text" name="state" class="form-control" id="inputstate" required>
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputZip">Zip</label>
-      <input type="number" name="zip" class="form-control" id="inputZip" required>
-    </div>
-  </div>
-  <button type="submit" name="u_add_principal" class="btn btn-primary">Sign in</button>
-</form>
-            </div>
-
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Principal</h3>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>Sl.No</th>
-								<th>Name</th>
-								<th>E-Mail</th>
-								<th>Qualification</th>
-								<th>City</th>
-								<th>State</th>
-								<th>Zip</th>
-							</tr>
-						</thead>
-						<tbody>
 <?php
- $sql="SELECT * FROM user_data INNER JOIN login_data on user_data.u_email=login_data.u_email WHERE login_data.u_role='Principal'";
+if(isset($_POST['admin_update']))
+{
+$email = $_SESSION['u_name'];
+$name = $_POST['name'];
+$address = $_POST['address'];
+$qualification = $_POST['qualification'];
+$DOB = $_POST['dob'];
+$city = $_POST['city'];
+$state = $_POST['state'];
+$zip = $_POST['zip'];
+$sql="UPDATE user_data SET u_name='$name', u_address='$address', u_qualification='$qualification',u_dob='$DOB',u_city='$city',u_state='$state',u_zip='$zip' WHERE u_email='$email'";   
+if($conn->query($sql))
+{
+    echo "<div class='alert alert-success success_alert' role='alert'>
+    This is a success alert—check it out!
+      </div>";
+}
+else
+{
+    echo "<div class='alert alert-danger' role='alert'>
+    This is a danger alert—check it out!
+      </div>";
+}
+}
+?>
+
+<?php
+$email = $_SESSION['u_email'];
+ $sql="SELECT * FROM user_data WHERE u_email='$email'";
  $result=$conn->query($sql);
  $i=1;
  if($result->num_rows > 0)
  {
-     while($row=$result->fetch_assoc())
+    while($row=$result->fetch_assoc())
      {
-		?>
-							<tr>
-								<td><?php echo $i;?></td>
-								<td><?php echo $row['u_name']; $i++?></td>
-								<td><?php echo $row['u_email']?></td>
-								<td><?php echo $row['u_qualification']?></td>
-								<td><?php echo $row['u_city']?></td>
-								<td><?php echo $row['u_state']?></td>
-								<td><?php echo $row['u_zip']?></td>
-							</tr>
-<?php
-
-}
-}
-else
-{
-echo "No Data Available";
-}
 ?>
-						</tbody>
-					</table>
-				</div>
 
-			</div>
+<div class="row" id="details">
+
+<div class="col-md-12 col-12 text-center mt-3"><h4><b><u>PERSONAL DETAILS</u></b></h4></div>
+
+<div class="col-md-12">
+<form class="needs-validation mt-5" novalidate method="POST">
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom01">User_ID</label>
+      <input type="number" class="form-control" name="id" id="validationCustom01" value="<?php echo $row['u_id'];?>" readonly>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Name</label>
+      <input type="text" class="form-control" name="name" id="validationCustom02" value="<?php echo $row['u_name'];?>" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom03">E-mail</label>
+      <input type="email" class="form-control" name="email" id="validationCustom03" value="<?php echo $row['u_email'];?>" readonly>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">Address</label>
+      <input type="text" class="form-control" name="address" id="validationCustom04" value="<?php echo $row['u_address'];?>" required>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">Qualification</label>
+      <input type="text" class="form-control" name="qualification" id="validationCustom04" value="<?php echo $row['u_qualification'];?>" required>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">Date-Of-Birth</label>
+      <input type="date" class="form-control" name="dob" id="validationCustom04" value="<?php echo $row['u_dob'];?>" required>
+    </div>
+
+  </div>
+
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">City</label>
+      <input type="text" class="form-control" name="city" id="validationCustom04" value="<?php echo $row['u_city'];?>" required>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">State</label>
+      <input type="text" class="form-control" name="state" id="validationCustom04" value="<?php echo $row['u_state'];?>" required>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom04">Zip</label>
+      <input type="number" class="form-control" name="zip" id="validationCustom04" value="<?php echo $row['u_zip'];?>" required>
+    </div>
+
+  </div>
+
+
+  <div class="col text-center mb-5">
+  <input class="btn btn-primary" name="admin_update" type="submit" value="Update Details">
+  </div>
+  <?php
+}
+    }
+		?>
+</form>
+</div>
+
+</div>
+</div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+
+<div id="changepass" style="display:none;" class="mb-5">
+<div class="col-md-12 col-12 text-center mt-3"><h4><b><u>CHANGE PASSWORD</u></b></h4></div>
+<div class="col-md-12">
+<form class="needs-validation mt-5" novalidate action="" method="POST">
+  <div class="form-row">
+  <div class="col-md-4 mb-3">
+    <label for="inputPassword5">Current Password</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="current" required>
+  </div>
+  <div class="col-md-4 mb-3">
+    <label for="inputPassword5">New Password</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="new" required>
+    <small id="passwordHelpBlock" class="form-text text-muted ">
+    Your password must be 8-20 characters long, contain letters (both upper and lower case) and numbers.
+    </small>
+  </div>
+  <div class="col-md-4 mb-3">
+    <label for="inputPassword5">Confirm Password</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="confirm" required>
+    </div>
+  </div>
+  <input type="hidden" value="" name="id">
+  <div class="col text-center mt-3">
+  <input class="btn btn-primary" type="submit" value="Change Password" name="change_pw_btn">
+  </div>
+</form>
+</div>
+
+
+</div>
+</div>
+        </div>
+
 		</main>
 		<!-- MAIN -->
 	</section>

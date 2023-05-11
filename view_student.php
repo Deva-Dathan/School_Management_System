@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('header.php');
 include('footer.php');
 include('config.php')
@@ -629,24 +630,13 @@ body {
 		</a>
 		<ul class="side-menu top">
 			<li>
-				<a href="#">
+				<a href="admin_dash.php">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
-            <a href="add_principal.php">
-					<i class='bx bxs-shopping-bag-alt' ></i>
-					<span class="text">Principal</span>
-				</a>
-			</li>
 			<li class="active">
-            <a href="add_teacher.php">
-					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Teachers</span>
-				</a>
-			</li>
-			<li>
 				<a href="view_student.php">
 					<i class='bx bx-user' ></i>
 					<span class="text">Students</span>
@@ -655,13 +645,13 @@ body {
 		</ul>
 		<ul class="side-menu">
 			<li>
-				<a href="#">
+				<a href="admin_settings.php">
 					<i class='bx bxs-cog' ></i>
 					<span class="text">Settings</span>
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout.php" class="logout">
 					<i class='bx bxs-log-out-circle' ></i>
 					<span class="text">Logout</span>
 				</a>
@@ -687,109 +677,33 @@ body {
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Principal</h1>
+					<h1>Student</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Principal</a>
+							<a href="#">Student</a>
 						</li>
 						<li><i class='bx bx-chevron-right' ></i></li>
 						<li>
-							<a class="active" href="#">Add Principal</a>
+							<a class="active" href="#">View Student</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 
-			<?php
-if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST['u_add_principal']))
-{
-
-	$fname=$_POST['fname'];
-	$lname=$_POST['lname'];
-	$name=$fname." ".$lname;
-	$address=$_POST['address'];
-	$email=$_POST['email'];
-	$dob=$_POST['dob'];
-	$qualification=$_POST['qualification'];
-	$city=$_POST['city'];
-	$state=$_POST['state'];
-	$zip=$_POST['zip'];
-
-	$sql="INSERT INTO user_data(u_name,u_address,u_dob,u_qualification,u_email,u_city,u_state,u_zip)values('$name','$address','$dob','$qualification','$email','$city','$state','$zip')";
-    if($conn->query($sql))
-    {
-      
-        echo "<div class='alert alert-success success_alert' role='alert'>
-				This is a success alert—check it out!
-	  			</div>";
-
-			$sql2="INSERT INTO login_data(u_email,u_password,u_role)values('$email','5f4dcc3b5aa765d61d8327deb882cf99','Principal')";
-			$conn->query($sql2);
-    
-    }
-    else
-    {
-        echo "<div class='alert alert-danger' role='alert'>
-			This is a danger alert—check it out!
-	  		</div>";
-    }
-}
-?>
-
-            <div class="add_fields">
-            <form method="POST">
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">First Name</label>
-      <input type="text" name="fname" class="form-control" id="inputfname4" placeholder="First Name" required>
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Last Name</label>
-      <input type="text" name="lname" class="form-control" id="inputlname4" placeholder="Last Name">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="inputAddress">Address</label>
-    <input type="text" name="address" class="form-control" id="inputAddress" placeholder="Address" required>
-  </div>
-  <div class="row">
-  <div class="form-group col-md-6">
-    <label for="inputemail">Email-ID</label>
-    <input type="email" name="email" class="form-control" id="inputemail" placeholder="Email-ID" required>
-  </div>
-  <div class="form-group col-md-3">
-    <label for="inputdob">Data-Of-Birth</label>
-    <input type="date" name="dob" class="form-control" id="inputdob" placeholder="DOB" required>
-  </div>
-  <div class="form-group col-md-3">
-    <label for="inputQualification">Qualification</label>
-    <input type="text" name="qualification" class="form-control" id="inputQualification" placeholder="Qualification" required>
-  </div>
-</div>
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <label for="inputCity">City</label>
-      <input type="text" name="city" class="form-control" id="inputCity" required>
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">State</label>
-      <input type="text" name="state" class="form-control" id="inputstate" required>
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputZip">Zip</label>
-      <input type="number" name="zip" class="form-control" id="inputZip" required>
-    </div>
-  </div>
-  <button type="submit" name="u_add_principal" class="btn btn-primary">Sign in</button>
-</form>
-            </div>
-
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
-						<h3>Principal</h3>
+						<h3>Students</h3>
 					</div>
-					<table>
+<?php
+$email = $_SESSION['u_email'];
+ $sql="SELECT * FROM user_data INNER JOIN login_data on user_data.u_email=login_data.u_email WHERE login_data.u_role='Student'";
+ $result=$conn->query($sql);
+ $i=1;
+ if($result->num_rows > 0)
+ {
+    ?>
+    					<table>
 						<thead>
 							<tr>
 								<th>Sl.No</th>
@@ -802,12 +716,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST['u_add_principal']))
 							</tr>
 						</thead>
 						<tbody>
-<?php
- $sql="SELECT * FROM user_data INNER JOIN login_data on user_data.u_email=login_data.u_email WHERE login_data.u_role='Principal'";
- $result=$conn->query($sql);
- $i=1;
- if($result->num_rows > 0)
- {
+    <?php
      while($row=$result->fetch_assoc())
      {
 		?>
